@@ -17,7 +17,7 @@ default-features = false
 features = ["blocking"]
 
 [dev-dependencies]
-mockito = "0.30"
+mockito = "0.31"
 
 [features]
 rust-tls = ["reqwest/rustls-tls"]
