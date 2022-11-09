@@ -1,9 +1,11 @@
 use std::fs::create_dir_all;
 use std::path::{Path, PathBuf};
 
-use glob::glob;
-use sass_rs::{compile_file, Options, OutputStyle};
+use libs::walkdir::{WalkDir, DirEntry};
+use libs::globset::{Glob};
+use libs::sass_rs::{compile_file, Options, OutputStyle};
 
+use crate::anyhow;
 use errors::{bail, Result};
 use utils::fs::{create_file, ensure_directory_exists};
 
@@ -47,7 +49,7 @@ fn compile_sass_glob(
 
     let mut compiled_paths = Vec::new();
     for file in files {
-        let css = compile_file(&file, options.clone())?;
+        let css = compile_file(&file, options.clone()).map_err(|e| anyhow!(e))?;
 
         let path_inside_sass = file.strip_prefix(&sass_path).unwrap();
         let parent_inside_sass = path_inside_sass.parent();
@@ -64,19 +66,23 @@ fn compile_sass_glob(
     Ok(compiled_paths)
 }
 
+fn is_partial_scss(entry: &DirEntry) -> bool {
+    entry.file_name()
+         .to_str()
+         .map(|s| s.starts_with("_"))
+         .unwrap_or(false)
+}
+
 fn get_non_partial_scss(sass_path: &Path, extension: &str) -> Vec<PathBuf> {
-    let glob_string = format!("{}/**/*.{}", sass_path.display(), extension);
-    glob(&glob_string)
-        .expect("Invalid glob for sass")
+    let glob_string = format!("*.{}", extension);
+    let glob = Glob::new(glob_string.as_str()).expect("Invalid glob for sass").compile_matcher();
+    
+    WalkDir::new(sass_path)
+        .into_iter()
+        .filter_entry(|e| !is_partial_scss(e))
         .filter_map(|e| e.ok())
-        .filter(|entry| {
-            !entry
-                .as_path()
-                .iter()
-                .last()
-                .map(|c| c.to_string_lossy().starts_with('_'))
-                .unwrap_or(true)
-        })
+        .map(|e| e.into_path())
+        .filter(|e| glob.is_match(e))
         .collect::<Vec<_>>()
 }
 

@@ -3,11 +3,11 @@
 title = "kangae"
 description = "a lightweight microblog theme for zola"
 template = "theme.html"
-date = 2022-06-03T14:22:50-07:00
+date = 2022-10-04T04:04:47-05:00
 
 [extra]
-created = 2022-06-03T14:22:50-07:00
-updated = 2022-06-03T14:22:50-07:00
+created = 2022-10-04T04:04:47-05:00
+updated = 2022-10-04T04:04:47-05:00
 repository = "https://github.com/ayushnix/kangae.git"
 homepage = "https://github.com/ayushnix/kangae"
 minimum_version = "0.15.0"
@@ -153,7 +153,7 @@ A `citeurl` can also be given as an argument to this shortcode to provide the ac
 the source is borrowed.
 
 ```
-{%/* quote(author="Edward Snowden", citeurl="https://old.reddit.com/r/IAmA/comments/36ru89/just_days_left_to_kill_mass_surveillance_under/crglgh2/")*/%}
+{%/* quote(author="Edward Snowden", citeurl="https://old.reddit.com/r/IAmA/comments/36ru89/just_days_left_to_kill_mass_surveillance_under/crglgh2/") */%}
 Arguing that you don't care about the right to privacy because you have nothing to hide is no different than saying you don't care about free speech because you have nothing to say.
 {%/* end */%}
 ```
@@ -178,11 +178,10 @@ If you're in India, you can also use UPI for donations. My UPI address is `ayush
 
 # Notes
 
-I'm not really a web developer and I don't intend to be one either. However, I am interested in
-learning HTML and CSS to create lightweight textual websites. You may be interested in reading [my
-log about how I learned HTML and CSS][12]. However, that page is just an unorganized dump of my
-thoughts and isn't a polished blog post. [Seirdy's blog post on creating textual websites][13] is
-probably a better reference.
+Although I'm not a web developer, I am interested in learning HTML and CSS to create lightweight
+textual websites. You may be interested in reading [my log about how I learned HTML and CSS][12].
+However, that page is just an unorganized dump of my thoughts and isn't a polished blog post.
+[Seirdy's blog post on creating textual websites][13] is probably a better reference.
 
 # TODO (maybe?)
 
@@ -196,6 +195,7 @@ probably a better reference.
 - pagination
 - light and dark mode switch
 - content tabs
+- microdata and microformats2
 
 [1]: https://kangae.ayushnix.com/
 [2]: https://www.getzola.org/

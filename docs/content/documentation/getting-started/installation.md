@@ -30,10 +30,12 @@ $ pacman -S zola
 
 ### Alpine Linux
 
-Zola is available in the official Alpine Linux repository, only on the `edge` version for now.
+Zola is available in the official Alpine Linux community repository since Alpine v3.13.
+
+See this section of the Alpine Wiki explaining how to enable the community repository if necessary: https://wiki.alpinelinux.org/wiki/Repositories#Enabling_the_community_repository
 
 ```sh
-$ apk add zola --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/
+$ apk add zola
 ```
 
 ### Debian
@@ -85,32 +87,53 @@ Zola is available on snapcraft:
 $ snap install --edge zola
 ```
 
+### Flatpak
+
+Zola is available as a flatpak on [flathub](https://flathub.org):
+
+```sh
+$ flatpak install flathub org.getzola.zola
+```
+
+To use zola:
+
+```sh
+$ flatpak run org.getzola.zola [command]
+```
+
+To avoid having to type this everytime, an alias can be created in `~/.bashrc`:
+
+```sh
+$ alias zola="flatpak run org.getzola.zola"
+```
+
 ### Docker
 
 Zola is available on [the GitHub registry](https://github.com/getzola/zola/pkgs/container/zola).
 It has no `latest` tag, you will need to specify a [specific version to pull](https://github.com/getzola/zola/pkgs/container/zola/versions).
 
 ```sh
-$ docker pull ghcr.io/getzola/zola:v0.15.1
+$ docker pull ghcr.io/getzola/zola:v0.16.0
 ```
 
 #### Build
 
 ```sh
-$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app ghcr.io/getzola/zola:v0.15.1 build
+$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app ghcr.io/getzola/zola:v0.16.0 build
 ```
 
 #### Serve
 
 ```sh
-$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 ghcr.io/getzola/zola:v0.15.1 serve --interface 0.0.0.0 --port 8080 --base-url localhost
+$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 ghcr.io/getzola/zola:v0.16.0 serve --interface 0.0.0.0 --port 8080 --base-url localhost
 ```
 
 You can now browse http://localhost:8080.
 
 > To enable live browser reload, you may have to bind to port 1024. Zola searches for an open
 > port between 1024 and 9000 for live reload. The new docker command would be
-> `$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 -p 1024:1024 ghcr.io/getzola/zola:v0.15.1 serve --interface 0.0.0.0 --port 8080 --base-url localhost`
+> `$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 -p 1024:1024 ghcr.io/getzola/zola:v0.16.0 serve --interface 0.0.0.0 --port 8080 --base-url localhost`
+
 
 ## Windows
 

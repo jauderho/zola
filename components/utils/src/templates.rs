@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use tera::{Context, Tera};
+use libs::tera::{Context, Tera};
 
 use errors::{bail, Result};
 
@@ -56,11 +56,13 @@ pub fn get_shortcodes(tera: &Tera) -> HashMap<String, ShortcodeDefinition> {
 
         if template.name.starts_with("__zola_builtins/shortcodes/") {
             let head_len = "__zola_builtins/shortcodes/".len();
-            shortcode_definitions.insert(
-                identifier[head_len..(identifier.len() - ext_len - 1)].to_string(),
-                ShortcodeDefinition::new(file_type, &template.name),
-            );
-            continue;
+            let name = &identifier[head_len..(identifier.len() - ext_len - 1)];
+            // We don't keep the built-ins one if the user provided one
+            if shortcode_definitions.contains_key(name) {
+                continue;
+            }
+            shortcode_definitions
+                .insert(name.to_string(), ShortcodeDefinition::new(file_type, &template.name));
         }
     }
 
@@ -78,7 +80,7 @@ pub fn render_template(
     theme: &Option<String>,
 ) -> Result<String> {
     if let Some(template) = check_template_fallbacks(name, tera, theme) {
-        return tera.render(&template, &context).map_err(std::convert::Into::into);
+        return tera.render(template, &context).map_err(std::convert::Into::into);
     }
 
     // maybe it's a default one?
@@ -147,10 +149,10 @@ pub fn check_template_fallbacks<'a>(
 
 #[cfg(test)]
 mod tests {
-    use crate::templates::check_template_fallbacks;
+    use crate::templates::{check_template_fallbacks, get_shortcodes};
 
     use super::rewrite_theme_paths;
-    use tera::Tera;
+    use libs::tera::Tera;
 
     #[test]
     fn can_rewrite_all_paths_of_theme() {
@@ -178,8 +180,8 @@ mod tests {
     #[test]
     fn template_fallback_is_successful() {
         let mut tera = Tera::parse("test-templates/*.html").unwrap();
-        tera.add_raw_template(&"hyde/templates/index.html", "Hello").unwrap();
-        tera.add_raw_template(&"hyde/templates/theme-only.html", "Hello").unwrap();
+        tera.add_raw_template("hyde/templates/index.html", "Hello").unwrap();
+        tera.add_raw_template("hyde/templates/theme-only.html", "Hello").unwrap();
 
         // Check finding existing template
         assert_eq!(check_template_fallbacks("index.html", &tera, &None), Some("index.html"));
@@ -192,5 +194,14 @@ mod tests {
             check_template_fallbacks("theme-only.html", &tera, &Some("hyde".to_string())),
             Some("hyde/templates/theme-only.html")
         );
+    }
+
+    #[test]
+    fn can_overwrite_builtin_shortcodes() {
+        let mut tera = Tera::parse("test-templates/*.html").unwrap();
+        tera.add_raw_template("__zola_builtins/shortcodes/youtube.html", "Builtin").unwrap();
+        tera.add_raw_template("shortcodes/youtube.html", "Hello").unwrap();
+        let definitions = get_shortcodes(&tera);
+        assert_eq!(definitions["youtube"].tera_name, "shortcodes/youtube.html");
     }
 }
