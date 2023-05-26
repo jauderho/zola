@@ -62,7 +62,7 @@ In this example the page for `Release year` would include links to pages for bot
 
 ## Configuration
 
-A taxonomy has five variables:
+A taxonomy has six variables:
 
 - `name`: a required string that will be used in the URLs, usually the plural version (i.e., tags, categories, etc.)
 - `paginate_by`: if this is set to a number, each term page will be paginated by this much.
@@ -70,6 +70,7 @@ A taxonomy has five variables:
 For example the default would be page/1.
 - `feed`: if set to `true`, a feed (atom by default) will be generated for each term.
 - `lang`: only set this if you are making a multilingual site and want to indicate which language this taxonomy is for
+- `render`: if set to `false`, pages will not be rendered for the taxonomy or for individual terms.
 
 Insert into the configuration file (config.toml):
 
@@ -89,19 +90,20 @@ taxonomies = [
 **Example 2:** (multilingual site)
 
 ```toml
+# These taxonomies go in the main section
 taxonomies = [
-    {name = "director", feed = true, lang = "fr"},
-    {name = "director", feed = true, lang = "eo"},
-    {name = "director", feed = true, lang = "en"},
-    {name = "genres", feed = true, lang = "fr"},
-    {name = "genres", feed = true, lang = "eo"},
-    {name = "genres", feed = true, lang = "en"},
-    {name = "awards", feed = true, lang = "fr"},
-    {name = "awards", feed = true, lang = "eo"},
-    {name = "awards", feed = true, lang = "en"},
-    {name = "release-year", feed = true, lang = "fr"},
-    {name = "release-year", feed = true, lang = "eo"},
-    {name = "release-year", feed = true, lang = "en"},
+    {name = "director", feed = true},
+    {name = "genres", feed = true},
+    {name = "awards", feed = true},
+    {name = "release-year", feed = true},
+]
+
+[languages.fr]
+taxonomies = [
+    {name = "director", feed = true},
+    {name = "genres", feed = true},
+    {name = "awards", feed = true},
+    {name = "release-year", feed = true},
 ]
 ```
 

@@ -49,9 +49,10 @@ $ sudo dpkg -i zola_<version>_amd64_debian_<debian_version>.deb
 
 ### Fedora
 
-Zola has been available in the official repositories since Fedora 29.
+On Fedora, Zola is avialable via [COPR](https://fedoraproject.org/wiki/Category:Copr).
 
 ```sh
+$ sudo dnf copr enable fz0x1/zola
 $ sudo dnf install zola
 ```
 
@@ -79,6 +80,14 @@ Zola is available in the official package repository.
 $ doas pkg_add zola
 ```
 
+### pkgsrc
+
+Zola is available in the official package repository, with [pkgin](https://pkgin.net/).
+
+```sh
+$ pkgin install zola
+```
+
 ### Snapcraft
 
 Zola is available on snapcraft:
@@ -101,11 +110,46 @@ To use zola:
 $ flatpak run org.getzola.zola [command]
 ```
 
-To avoid having to type this everytime, an alias can be created in `~/.bashrc`:
+To avoid having to type this every time, an alias can be created in `~/.bashrc`:
 
 ```sh
 $ alias zola="flatpak run org.getzola.zola"
 ```
+
+### NixOS / Nixpkgs
+
+Zola is [available](https://search.nixos.org/packages?show=zola&query=zola)
+in the nixpkgs repository. If you're using NixOS, you can install Zola
+by adding the following to `/etc/nixos/configuration.nix`:
+
+```
+environment.systemPackages = [
+  pkgs.zola
+];
+```
+
+If you're using Nix as a package manager in another OS, you can install it using:
+
+```
+nix-env -iA nixpkgs.zola
+```
+
+### Via Github Actions
+
+Zola can be installed in a GHA workflow with [taiki-e/install-action](https://github.com/taiki-e/install-action).
+Simply add it in your CI config, for example:
+
+```yaml
+jobs:
+  foo:
+    steps:
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.17.1
+      # ...
+```
+
+See the action repo for docs and more examples.
 
 ### Docker
 
@@ -113,26 +157,26 @@ Zola is available on [the GitHub registry](https://github.com/getzola/zola/pkgs/
 It has no `latest` tag, you will need to specify a [specific version to pull](https://github.com/getzola/zola/pkgs/container/zola/versions).
 
 ```sh
-$ docker pull ghcr.io/getzola/zola:v0.16.0
+$ docker pull ghcr.io/getzola/zola:v0.17.1
 ```
 
 #### Build
 
 ```sh
-$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app ghcr.io/getzola/zola:v0.16.0 build
+$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app ghcr.io/getzola/zola:v0.17.1 build
 ```
 
 #### Serve
 
 ```sh
-$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 ghcr.io/getzola/zola:v0.16.0 serve --interface 0.0.0.0 --port 8080 --base-url localhost
+$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 ghcr.io/getzola/zola:v0.17.1 serve --interface 0.0.0.0 --port 8080 --base-url localhost
 ```
 
 You can now browse http://localhost:8080.
 
 > To enable live browser reload, you may have to bind to port 1024. Zola searches for an open
 > port between 1024 and 9000 for live reload. The new docker command would be
-> `$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 -p 1024:1024 ghcr.io/getzola/zola:v0.16.0 serve --interface 0.0.0.0 --port 8080 --base-url localhost`
+> `$ docker run -u "$(id -u):$(id -g)" -v $PWD:/app --workdir /app -p 8080:8080 -p 1024:1024 ghcr.io/getzola/zola:v0.17.1 serve --interface 0.0.0.0 --port 8080 --base-url localhost`
 
 
 ## Windows
@@ -153,28 +197,15 @@ Zola does not work in PowerShell ISE.
 
 ## From source
 To build Zola from source, you will need to have Git, [Rust and Cargo](https://www.rust-lang.org/)
-installed. You will also need to meet additional dependencies to compile [libsass](https://github.com/sass/libsass):
+installed.
 
-- OSX, Linux and other Unix-like operating systems: `make` (`gmake` on BSDs), `g++`, `libssl-dev`
-  - NixOS: Create a `shell.nix` file in the root of the cloned project with the following contents:
-  ```nix
-   with import <nixpkgs> {};
-
-   pkgs.mkShell {
-     buildInputs = [
-       libsass
-       openssl
-       pkgconfig
-    ];
-   }
-  ```
-  - Then, invoke `nix-shell`. This opens a shell with the above dependencies. Then, run `cargo build --release` to build the project.
-- Windows (a bit trickier): updated `MSVC` and overall updated VS installation
-
-From a terminal, you can now run the following command:
+From a terminal, you can now run the following commands:
 
 ```sh
-$ cargo build --release
+$ git clone https://github.com/getzola/zola.git
+$ cd zola
+$ cargo install --path .
+$ zola --version
 ```
 
 If you encountered compilation errors like `error: failed to run custom build command for 'ring v0.16.20'`, you can try the command below instead:
@@ -184,5 +215,10 @@ $ cargo build --release --no-default-features --features=native-tls
 ```
 
 The binary will be available in the `target/release` directory. You can move it in your `$PATH` to have the
-`zola` command available globally or in a directory if you want for example to have the binary in the
-same repository as the site.
+`zola` command available globally:
+
+```sh
+$ cp target/release/zola ~/.cargo/bin/zola
+```
+
+or in a directory if you want for example to have the binary in the same repository as the site.

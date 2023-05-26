@@ -7,11 +7,11 @@ weight = 20
 ## Installing a theme
 
 The easiest way to install a theme is to clone its repository in the `themes`
-directory.
+directory:
 
 ```bash
 $ cd themes
-$ git clone THEME_REPO_URL
+$ git clone <theme repository URL>
 ```
 
 Cloning the repository using Git or another VCS will allow you to easily
@@ -29,6 +29,7 @@ name has to be the name of the directory you cloned the theme in.
 For example, if you cloned a theme in `themes/simple-blog`, the theme name to use
 in the configuration file is `simple-blog`. Also make sure to place the variable in the top level of the 
 `.toml` hierarchy and not after a dict like [extra] or [markdown].
+Some themes require additional configuration before they can work properly. Be sure to follow the instructions found on your chosen theme's documentation to properly configure the theme. 
 
 ## Customizing a theme
 

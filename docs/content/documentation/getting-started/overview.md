@@ -5,7 +5,9 @@ weight = 5
 
 ## Zola at a Glance
 
-Zola is a static site generator (SSG), similar to [Hugo](https://gohugo.io/), [Pelican](https://blog.getpelican.com/), and [Jekyll](https://jekyllrb.com/) (for a comprehensive list of SSGs, please see [Jamstack](https://jamstack.org/generators)). It is written in [Rust](https://www.rust-lang.org/) and uses the [Tera](https://tera.netlify.com/) template engine, which is similar to [Jinja2](https://jinja.palletsprojects.com/en/2.10.x/), [Django templates](https://docs.djangoproject.com/en/2.2/topics/templates/), [Liquid](https://shopify.github.io/liquid/), and [Twig](https://twig.symfony.com/). Content is written in [CommonMark](https://commonmark.org/), a strongly defined, highly compatible specification of [Markdown](https://www.markdownguide.org/).
+Zola is a static site generator (SSG), similar to [Hugo](https://gohugo.io/), [Pelican](https://blog.getpelican.com/), and [Jekyll](https://jekyllrb.com/) (for a comprehensive list of SSGs, please see [Jamstack](https://jamstack.org/generators)). It is written in [Rust](https://www.rust-lang.org/) and uses the [Tera](https://tera.netlify.com/) template engine, which is similar to [Jinja2](https://jinja.palletsprojects.com/en/2.10.x/), [Django templates](https://docs.djangoproject.com/en/2.2/topics/templates/), [Liquid](https://shopify.github.io/liquid/), and [Twig](https://twig.symfony.com/).
+
+Content is written in [CommonMark](https://commonmark.org/), a strongly defined, highly compatible specification of [Markdown](https://www.markdownguide.org/). Zola uses [pulldown-cmark](https://github.com/raphlinus/pulldown-cmark#pulldown-cmark) to parse markdown files. The goal of this library is 100% compliance with the CommonMark spec. It adds a few additional features such as parsing footnotes, Github flavored tables, Github flavored task lists and strikethrough.
 
 SSGs use dynamic templates to transform content into static HTML pages. Static sites are thus very fast and require no databases, making them easy to host. A comparison between static and dynamic sites, such as WordPress, Drupal, and Django, can be found [here](https://dev.to/ashenmaster/static-vs-dynamic-sites-61f).
 
@@ -17,7 +19,7 @@ Unlike some SSGs, Zola makes no assumptions regarding the structure of your site
 
 ### Initialize Site
 
-> This overview is based on Zola 0.9.
+> This overview is based on Zola 0.17.1.
 
 Please see the detailed [installation instructions for your platform](@/documentation/getting-started/installation.md). With Zola installed, let's initialize our site:
 
@@ -64,15 +66,22 @@ For reference, by the **end** of this overview, our `myblog` directory will have
 └── themes/
 ```
 
-Let's start the Zola development server with:
+Let's start the Zola development server within the newly created `myblog` directory:
 
 ```bash
+$ cd myblog
 $ zola serve
 Building site...
--> Creating 0 pages (0 orphan), 0 sections, and processing 0 images
-```
+Checking all internal links with anchors.
+> Successfully checked 0 internal link(s) with anchors.
+-> Creating 0 pages (0 orphan) and 0 sections
+Done in 13ms.
 
-> This command must be run in the base Zola directory, which contains `config.toml`.
+Listening for changes in .../myblog/{config.toml,content,sass,static,templates}
+Press Ctrl+C to stop
+
+Web server is available at http://127.0.0.1:1111
+```
 
 If you point your web browser to <http://127.0.0.1:1111>, you should see a "Welcome to Zola" message.
 
