@@ -3,16 +3,16 @@
 title = "Seje2"
 description = "A beautiful zola theme"
 template = "theme.html"
-date = 2023-04-30T21:01:54+02:00
+date = 2023-09-15T21:56:17+02:00
 
 [extra]
-created = 2023-04-30T21:01:54+02:00
-updated = 2023-04-30T21:01:54+02:00
+created = 2023-09-15T21:56:17+02:00
+updated = 2023-09-15T21:56:17+02:00
 repository = "https://github.com/eatradish/seje2"
 homepage = "https://github.com/eatradish/Seje2"
 minimum_version = "0.15.0"
 license = "MIT"
-demo = "https://blog.miraclemilk.me/Seje2"
+demo = "https://eatradish.github.io/Seje2"
 
 [extra.author]
 name = "Mag Mell"
